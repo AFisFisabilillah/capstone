@@ -70,7 +70,9 @@ const DataPengguna = () => {
         }
 
         // Kalau user mengunggah foto baru
-        if (updatedUser.photo instanceof File) {
+        if (user.photo) {
+          console.log("user mengupdate photo");
+          
             formData.append("photo", user.photo);
         }
 
@@ -99,7 +101,7 @@ const handleDeleteUser = async (user) => {
   if (!confirmDelete) return;
 
   try {
-    const response = await axios.delete(`http://localhost:8000/api/admin/users/${user}`, {
+    const response = await axios.delete(`http://localhost:8000/api/admin/users/${user.id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -108,7 +110,7 @@ const handleDeleteUser = async (user) => {
     alert("Pengguna berhasil dihapus!");
 
     // Update tampilan
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    setUsers((prevUsers) => prevUsers.filter((u) => u.id !== user.id));
   } catch (error) {
     console.error("Gagal menghapus pengguna:", error.response?.data || error);
     alert("Gagal menghapus pengguna.");
@@ -144,7 +146,12 @@ const handleDeleteUser = async (user) => {
         />
 
         {/* Tabel pengguna */}
-        <TableUser users={users} onEdit={handleEditUser} />
+        <TableUser
+          users={users}
+          onEdit={handleEditUser}
+          onDelete={handleDeleteUser}
+        />
+
       </div>
     </AdminLayout>
   );

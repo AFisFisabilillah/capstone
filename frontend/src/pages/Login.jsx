@@ -79,10 +79,12 @@ const Login = () => {
             {/* Tombol Login */}
             <button
               type="submit"
-              className="w-full bg-[#3674B5] text-white py-3 rounded hover:bg-[#1B4B82] transition"
-            >
+              className="w-full bg-[#3674B5] text-white py-3 rounded hover:bg-[#1B4B82] transition">
               Login
             </button>
+            <p className="text-gray-600 mb-4 text-center">
+              Apakah Anda user? <a href="Loginuser">Masuk</a>
+            </p>
           </form>
         </div>
       </div>

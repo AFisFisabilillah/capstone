@@ -15,12 +15,12 @@ const DataPresensi = () => {
   useEffect(() => {
     const fetchPresensi = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/admin/presensi", {
+        const response = await axios.get("http://127.0.0.1:8000/api/admin/absensi", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`, // Gunakan auth jika perlu
           },
         });
-        setPresensiData(response.data.presensi);
+        setPresensiData(response.data.data);
       } catch (error) {
         console.error("Gagal mengambil data presensi:", error);
       }
@@ -32,7 +32,7 @@ const DataPresensi = () => {
   // Tambah presensi
   const handleAddPresensi = async (presensi) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/admin/presensi", presensi, {
+      const response = await axios.post("http://localhost:8000/api/admin/absensi", presensi, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -54,7 +54,7 @@ const DataPresensi = () => {
 
   const handleSubmitEdit = async (updatedPresensi) => {
     try {
-      await axios.put(`http://localhost:8000/api/admin/presensi/${updatedPresensi.id}`, updatedPresensi, {
+      await axios.put(`http://localhost:8000/api/admin/absensi/${updatedPresensi.id}`, updatedPresensi, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -72,12 +72,7 @@ const DataPresensi = () => {
     <AdminLayout>
       <div className="p-6">
         <div className="flex mb-4 justify-end">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-[#3674B5] hover:bg-[#1B4B82] text-white px-4 py-2 rounded"
-          >
-            + Presensi
-          </button>
+          <h1 className="text-3xl font-bold">Data Presensi user</h1>
         </div>
 
         {/* Modal Tambah Presensi */}

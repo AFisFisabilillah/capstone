@@ -13,7 +13,7 @@ import ProfilAdmin from "./pages/admin/ProfilAdmin";
 
 // Halaman Login
 import Login from "./pages/Login"; // Pastikan path ini sesuai dengan lokasi file Login.js
-import Signup from "./pages/Signup";
+import Loginuser from "./pages/loginuser";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
         {/* Routing untuk Login */}
         <Route path="/login" element={<Login />} />
         {/* Routing untuk Login */}
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/loginuser" element={<Loginuser />} />
         {/* Routing untuk User */}
         <Route path="/" element={<DashboardUser />} />
         <Route path="/presensi" element={<PresensiUser />} />

@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Absensi;
 use App\Http\Resources\AbsensiResponse;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResponse;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\Http\Resources\AdminResource;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Container\Attributes\Auth;
+//use Illuminate\Container\Attributes\Auth;//
 use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -22,15 +23,42 @@ class AdminController extends Controller
 {
     private $pathModel ='localhost:5000';
 
-    public function dashboard(Request $request)
-    {
-        $user = auth()->user();
+    public function dashboard(){
+        $hadir =  Absensi::where("status", "berhasil")->get();
+        $tidakHadir =  Absensi::whereNot("status", "berhasil")->get();
+        $results = DB::table('absensi')
+            ->select(DB::raw('DATE_FORMAT(tanggal, "%M") as name'), DB::raw('count(status) as Hadir'))
+            ->groupBy(DB::raw('DATE_FORMAT(tanggal, "%M")'))
+            ->get();
+
+
+            $data = DB::table('absensi')
+                ->select('status as name', DB::raw('count(id) as value'))
+                ->groupBy('status')
+                ->get();
+
+
         return response()->json([
-            "status" => "success",
-            "message" => "data user",
-            "data" => new AdminResource($user)
+            "status"=>"berhasil mengambil dashboard",
+            "message" => "berhasil mengambil data",
+            "data" => [
+                "totaluser" => User::count("id"),
+                "hadir" => count($hadir),
+                "tidakHadir" => count($tidakHadir),
+                "barchart" => $results,
+                "piechart" => $data
+            ]
+            ]);
+    }
+
+
+    public function profile()
+    {
+        return response()->json([
+            'admin' => Auth::user()
         ]);
     }
+
 
     public function createUser(Request $request)    {
         $request->validate([
@@ -67,7 +95,7 @@ class AdminController extends Controller
 
         return response([
             "status" => "success",
-            "message" => "berhasil menambhakan user",
+            "message" => "berhasil menambahkan user",
             "data" => (new UserResponse($user))
         ]);
 
@@ -130,7 +158,7 @@ class AdminController extends Controller
     }
 }
 
-    
+
 
 
     public function getUser(Request $request){
@@ -200,6 +228,16 @@ class AdminController extends Controller
             ]
         ]);
 
+    }
+
+    public function absensiUser(){
+        $absensi = Absensi::all();
+
+        return response()->json([
+            "status" => "success",
+            "message" => "berhasil mendapatkan absensi",
+            "data" => AbsensiResponse::collection($absensi)
+        ]);
     }
 
 

@@ -20,6 +20,8 @@ Route::middleware(['auth:sanctum', 'isAdmin'])->group(function (){
     Route::get('/admin/users', [AdminController::class, 'getUser']);
     Route::delete('/admin/users/{user}', [AdminController::class, 'deleteUser']);
     Route::get('/admin/users/{user}', [AdminController::class, 'detailUser']);
+    Route::get('/admin/absensi',[AdminController::class,'absensiuser']);
+    Route::get('/admin/profile', [AdminController::class, 'profile']);
 });
 
 
@@ -27,6 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/profile ', [UserController::class, 'profile']);
     Route::post('/absensi', [UserController::class, 'absensi']);
     Route::get('/absensi/my', [UserController::class, 'userAbsensi']);
+    Route::get('/dashboard', [UserController::class, 'dashboard']);
 
     Route::get('/auth/logout ', [AuthenticaeController::class, 'logout']);
 

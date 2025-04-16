@@ -11,27 +11,39 @@ const DashboardAdmin = () => {
     penggunaHadir: 0,
     tidakHadir: 0,
   });
+  const [piechart, setPieChart] = useState([]);
 
   useEffect(() => {
     // Ambil data dari backend saat halaman dimuat
     const fetchDashboardData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/", {
+        const response = await fetch("http://localhost:8000/api/admin", {
+          method: "GET",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Kirim token auth jika dibutuhkan
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
-        });
-
-        const data = response.data.data;
+        }).then(res=> res.json());
+        console.log(response);
+        
+        
+        
+        const data = response.data;
+        console.log(data);
+        
         setDashboardData({
-          totalPengguna: data.total_pengguna,
-          penggunaHadir: data.pengguna_hadir,
-          tidakHadir: data.tidak_hadir,
+          totalPengguna: data.totaluser,
+          penggunaHadir: data.hadir,
+          tidakHadir: data.tidakHadir,
         });
+        
+        setPieChart(data.piechart);
       } catch (error) {
         console.error("Gagal mengambil data dashboard:", error);
       }
     };
+
+    
 
     fetchDashboardData();
   }, []);
@@ -45,8 +57,7 @@ const DashboardAdmin = () => {
           <CardStat title="Tidak Hadir" value={dashboardData.tidakHadir} color="bg-red-500" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <PieChartAdmin />
-          <BarChartAdmin />
+          <PieChartAdmin dataPie={piechart}/>
         </div>
       </div>
     </AdminLayout>

@@ -9,18 +9,13 @@ import {
   Legend,
 } from "recharts";
 
-const data = [
-  { name: "Jan", Hadir: 30, "Tidak Hadir": 0 },
-  { name: "Feb", Hadir: 30, "Tidak Hadir": 0 },
-  { name: "Mar", Hadir: 31, "Tidak Hadir": 0 },
-  { name: "Apr", Hadir: 29, "Tidak Hadir": 1 },
-  { name: "Mei", Hadir: 28, "Tidak Hadir": 2 },
-];
 
-const BarChartStat = () => {
+
+const BarChartStat = ({data}) => {
+  
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg">
-      <h3 className="text-lg font-semibold mb-4">Statistik Kehadiran Per Bulan</h3>
+      <h3 className="text-gray-600 mb-4 text-lg font-semibold mb-4">Statistik Kehadiran Per Bulan</h3>
       {/* Data Per Bulan */}
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data} barGap={8} barCategoryGap="30%">

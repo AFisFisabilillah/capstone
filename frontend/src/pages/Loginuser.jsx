@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Loginuser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const Login = () => {
       if (token) {
         localStorage.setItem("token", token);
         console.log("Token berhasil disimpan:", token);
-        navigate("/admin"); // Redirect ke dashboard setelah login sukses
+        navigate("/"); // Redirect ke dashboard setelah login sukses
       } else {
         setError("Token tidak ditemukan dalam response");
         console.error("Token undefined, respons server:", response.data);
@@ -83,7 +83,7 @@ const Login = () => {
               Login
             </button>
             <p className="text-gray-600 mb-4 text-center">
-              Apakah Anda user? <a href="loginuser.jsx">Masuk</a>
+              Apakah Anda Admin? <a href="Login">Masuk</a>
             </p>
           </form>
         </div>
@@ -92,4 +92,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Loginuser;

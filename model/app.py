@@ -54,7 +54,7 @@ def compare_face():
 
         # Gunakan Cosine Similarity manual untuk kecepatan lebih baik
         similarity = np.dot(new_encoding, stored_encoding) / (np.linalg.norm(new_encoding) * np.linalg.norm(stored_encoding))
-        match = similarity > 0.6        # 0.7 sebagai threshold kecocokan
+        match = similarity > 0.4        # 0.7 sebagai threshold kecocokan
         print(similarity)
         return jsonify({"status":  bool(match), "message": "Wajah cocok" if match else "Wajah tidak cocok"})
     except Exception as e:

@@ -2,16 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AbsensiResponse;
+use App\Models\User;
 use App\Models\Absensi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResponse;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Http\Resources\AbsensiResponse;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller
 {
+    public function dashboard(){
+        $hadir =  Absensi::where("status", "berhasil")->get();
+        $tidakHadir =  Absensi::whereNot("status", "berhasil")->get();
+        $results = DB::table('absensi')
+            ->select(DB::raw('DATE_FORMAT(tanggal, "%M") as name'), DB::raw('count(status) as Hadir'))
+            ->where('user_id', Auth::id())
+            ->groupBy(DB::raw('DATE_FORMAT(tanggal, "%M")'))
+            ->get();
+
+
+            $data = DB::table('absensi')
+                ->select('status as name', DB::raw('count(id) as value'))
+                ->where('user_id', Auth::id())
+                ->groupBy('status')
+                ->get();
+
+
+        return response()->json([
+            "status"=>"berhasil mengambil dashboard",
+            "message" => "berhasil mengambil data",
+            "data" => [
+                "hadir" => count($hadir),
+                "tidakHadir" => count($tidakHadir),
+                "barchart" => $results,
+                "piechart" => $data
+            ]
+            ]);
+    }
     public function profile(){
         $user = auth()->user();
         return response()->json([
@@ -61,7 +91,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $limit = $request->input('limit', 10);
+        $limit = $request->input('limit', 100);
 
         $absensi = $user->absensi()->paginate($limit);
 
